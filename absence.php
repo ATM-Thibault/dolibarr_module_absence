@@ -6,7 +6,7 @@
 	dol_include_once('/absence/lib/absence.lib.php');
 	dol_include_once('/valideur/class/valideur.class.php');
 	require_once DOL_DOCUMENT_ROOT.'/user/class/usergroup.class.php';
-
+	
 	$langs->load('absence@absence');
 	$langs->load('main');
 
@@ -749,7 +749,7 @@ function _fiche(&$PDOdb, &$absence, $mode) {
 	$PDOdb->Get_line();
 
 	$pointeurTest=(int)$PDOdb->Get_field('nb');
-
+	
 	if(_debug()) {
 		print $sql;
 	}
@@ -852,7 +852,31 @@ function _fiche(&$PDOdb, &$absence, $mode) {
     $input_doc = '<input class="flat minwidth400" type="file"'.((! empty($conf->global->MAIN_DISABLE_MULTIPLE_FILEUPLOAD) || $conf->browser->layout != 'classic')?' name="userfile"':' name="userfile[]" multiple').
                  (empty($conf->global->MAIN_UPLOAD_DOC) || empty($user->rights->absence->myactions->creerAbsenceCollaborateur)?' disabled':'').' />';
 
-//    var_dump($droitSupprimer);
+
+                 
+   print dol_get_fiche_head(absencePrepareHead($absence, $mode!='edit'? 'absence' : 'absenceCreation')  , 'fiche', $langs->trans('Absence'));
+   
+   //var_dump($absence);
+   
+   $solde_conge = 100000;
+   
+  // print dol_banner_tab($userValidation, 'firstname', 'tgtrhthrthtrhtrhtrhtrhtrhrthrthtrhtrhtrhthshtrhtrhtrshtrshrtshtyr', 0, 'rowid', 'nom', '', '', 0, '', '', 'arearefnobottom');
+   $paramid = '' ; 
+   $morehtml='';
+   $shownav=1;
+   $fieldid='rowid'; 
+   $fieldref='ref';
+   $morehtmlref='';
+   $moreparam='';
+   $nodbprefix=0; 
+   $morehtmlleft='<div style="clear: both;" >Jours pris : '. $absence->duree .'</div >'; 
+   $morehtmlstatus='<div >Solde : '.$solde_conge.'</div >';
+   $onlybanner=0;
+   $morehtmlright='';
+   
+   print dol_banner_tab($userValidation, 'nextlink', $morehtml, $shownav, $fieldid, $fieldref, $morehtmlref, $moreparam, $nodbprefix, $morehtmlleft, $morehtmlstatus, $onlybanner, $morehtmlright);
+                 
+    //var_dump($droitSupprimer);
     print $TBS->render('./tpl/absence.tpl.php'
 		,array(
 			//'TRegle' =>$TRegle
@@ -952,8 +976,9 @@ function _fiche(&$PDOdb, &$absence, $mode) {
 			)
 			,'view'=>array(
 				'mode'=>$mode
-				,'head'=>dol_get_fiche_head(absencePrepareHead($absence, 'absence')  , 'fiche', $langs->trans('Absence'))
-				,'head2'=>dol_get_fiche_head(absencePrepareHead($absence, 'absenceCreation')  , 'fiche', $langs->trans('Absence'))
+				//,'head'=>dol_get_fiche_head(absencePrepareHead($absence, 'absence')  , 'fiche', $langs->trans('Absence'))
+				//,'head2'=>dol_get_fiche_head(absencePrepareHead($absence, 'absenceCreation')  , 'fiche', $langs->trans('Absence'))
+				//,'dolbannertab' => dol_banner_tab($absence, 'ref', $linkback = '', 0, 'rowid', 'nom', '', '', 0, '', '', 'arearefnobottom')
 				,'dateFormat'=>$langs->trans("FormatDateShortJavaInput")
 				,'form_start'=>$form_start
 				,'form_end'=>$form->end_form()
@@ -1001,6 +1026,7 @@ function _fiche(&$PDOdb, &$absence, $mode) {
 			,'langs' => $langs
 		)
 	);
+
 
 	// End of page
 

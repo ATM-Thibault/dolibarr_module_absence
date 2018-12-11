@@ -757,7 +757,12 @@ class TRH_Absence extends TObjetStd {
 			return true;
 		}
 
-
+	}
+	
+	
+	
+	static function getLibStatut(){
+		
 	}
 
 	/*
